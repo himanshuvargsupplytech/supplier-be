@@ -19,16 +19,16 @@ app.use(helmet());
 const CustomerDataRoutes = require("./routes/submitData");
 app.use("/api/v1", CustomerDataRoutes);
 
-const SellerDataRoutes = require("./routes/queryUserSearch");
+// const SellerDataRoutes = require("./routes/queryUserSearch");
 
-app.use("/api/v1", SellerDataRoutes);
+// app.use("/api/v1", SellerDataRoutes);
 
-const UserRegistrations=require("./routes/user")
-app.use("/api/v1",UserRegistrations);
+// const UserRegistrations=require("./routes/user")
+// app.use("/api/v1",UserRegistrations);
 
 
-const userLogin=require("./routes/user")
-app.use("/api/v1",userLogin)
+// const userLogin=require("./routes/user")
+// app.use("/api/v1",userLogin)
 
 
 app.listen(PORT, () => {
