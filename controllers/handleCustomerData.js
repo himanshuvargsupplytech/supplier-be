@@ -20,22 +20,23 @@ const blobServiceClient = new BlobServiceClient(
 
 const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER_NAME);
 
-async function extractMetadata(headers) {
-  const contentType = headers['content-type'];
-  const fileType = contentType.split('/')[1];
-  const contentDisposition = headers['content-disposition'];
-  const caption = headers['x-image-caption'] || 'No caption provided';
-  const matches = /filename="([^"]+)/i.exec(contentDisposition);
-  const fileName = matches?.[1] || `image-${Date.now()}.${fileType}`;
+const modifiedDate=(d)=>
+  {
+    return d.toString().slice(0,15);
+  }
+  
 
-  return { fileName, caption, fileType };
-}
 
 async function uploadFileToBlob(file) {
-  const blockBlobClient = containerClient.getBlockBlobClient(file.originalname);
+  //creates blob object
+  const blockBlobClient = containerClient.getBlockBlobClient( modifiedDate(new Date (Date.now()))+file.originalname);
   // var accessCondition = AccessCondition.GenerateIfNotExistsCondition();
 
+  console.log("blockBlobClient",blockBlobClient);
+  //passing data about blob
   await blockBlobClient.uploadData(fs.readFileSync(file.path));
+  
+
   return blockBlobClient.url;
   
 }
@@ -130,12 +131,37 @@ exports.handleCustomerData = async (req, res) => {
 
     if (balanceSheetFile) {
       balanceSheetFileUrl = await uploadFileToBlob(balanceSheetFile);
+
+     
+      console.log("balancesheet fileurl",balanceSheetFileUrl)
       await saveFileMetadata(balanceSheetFile.originalname, balanceSheetFileUrl);
+
+      balanceSheetFileUrl && (
+        fs.unlink(balanceSheetFile.path,(err)=>{
+          if(err)
+          {
+            console.log(err)
+          
+          }
+        })
+      )
+
+
     }
 
     if (incomeCertificateFile) {
       incomeCertificateFileUrl = await uploadFileToBlob(incomeCertificateFile);
       await saveFileMetadata(incomeCertificateFile.originalname, incomeCertificateFileUrl);
+
+      incomeCertificateFile && (
+        fs.unlink(incomeCertificateFile.path,(err)=>{
+          if(err)
+          {
+            console.log("err in deleting file from disk",err)
+          
+          }
+        })
+      )
     }
     const response = await customerData.create({
       companyName,

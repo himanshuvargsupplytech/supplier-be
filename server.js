@@ -6,7 +6,7 @@ const helmet=require("helmet");
 
 
 require("dotenv").config();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4001;
 
 // use middleware
 app.use(express.json());
