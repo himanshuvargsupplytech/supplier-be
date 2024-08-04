@@ -5,7 +5,7 @@ const customerData = require("../models/customerData");
 const fs = require("fs");
 const path = require("path");
 
-const { formatDateToMySQL } = require("../utils/dateUtils");
+
 require("dotenv").config();
 
 const dbConnect = require("../config/database");
