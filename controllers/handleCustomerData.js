@@ -202,7 +202,7 @@ exports.handleCustomerData = async (req, res) => {
 
 
 
-    res.status(200).send("Files uploaded to Azure Blob Storage and metadata saved to MongoDB");
+    res.status(200).send("form submitted sucessfully");
   } catch (error) {
     console.log(error);
     res.status(500).json({
