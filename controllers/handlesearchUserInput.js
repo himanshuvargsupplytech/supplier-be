@@ -17,7 +17,7 @@ exports.handlesearchUserInput = async (req, res) => {
     if (suppliers.length === 0) {
       res
         .status(404)
-        .json({ message: "No suppliers found matching your criteria" });
+        .json({ message: "No suppliers found matching your criteria"});
     } else {
       res.status(200).json(suppliers);
     }

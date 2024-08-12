@@ -161,8 +161,8 @@
 const mongoose = require("mongoose");
 
 const fileSchema = new mongoose.Schema({
-  filename: { type: String, required: true },
-  path: { type: String, required: true },
+  originalname: { type: String, required: true },
+  path: { type: String, required: false },
   uploadedAt: { type: Date, default: Date.now },
 });
 
@@ -216,7 +216,7 @@ const customerDataSchema = new mongoose.Schema({
     maxlength: 100,
     default: null,
   },
-  detailsOfService: {
+  details_of_service: {
     type: String,
     maxlength: 500,
   },

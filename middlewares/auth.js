@@ -6,16 +6,21 @@ exports.auth=(req ,res,next)=>{
 
     try{
       //extract JWT token
-      const token=req.body.token;
+      const token=req.cookies.token||req.body.token||req.header("Authorization").replace("Bearer ", "");
 
+      console.log("token",token);
 
-      if(!token)
+      //token is present or not
+      if(!token||token===undefined)
       {
         return res.status(401).json({
             success:false,
             message:"Token is Missing"
         })
       }
+
+      console.log(req.body);
+      console.log(req.cookies);
     
 
 
@@ -24,12 +29,13 @@ exports.auth=(req ,res,next)=>{
     try{
         const decode=jwt.verify(token,process.env.JWT_SECRET);
 
-        console.log(decode);
+        console.log("decode after running verify",decode);
         //to cross check role that is why we are inserting  decode to req
         req.user=decode;
        
 
     }
+  
    
 
     catch(error){
@@ -39,7 +45,8 @@ exports.auth=(req ,res,next)=>{
         })
     }
 
-    next();
+      next();
+ 
 
    
 }
@@ -90,7 +97,7 @@ exports.auth=(req ,res,next)=>{
 //   };
 
 
-exports.isStudent=(res,req)=>{
+exports.isStudent=(req,res,next)=>{
 
     try{
 
@@ -98,7 +105,7 @@ exports.isStudent=(res,req)=>{
     {
         return res.status(401).json({
                success:false,
-            message:"this is protected route  valid for valid student"
+            message:"this is protected route   for  student"
 
         })
     }
@@ -117,7 +124,7 @@ exports.isStudent=(res,req)=>{
 }
 
 
-exports.isAdmin=(res,req)=>{
+exports.isAdmin=(req,res,next)=>{
 
     try{
 
@@ -125,7 +132,7 @@ exports.isAdmin=(res,req)=>{
     {
         return res.status(401).json({
                success:false,
-            message:"this is protected route  valid for valid admin"
+            message:"this is protected route  for admin"
 
         })
     }
@@ -137,7 +144,7 @@ exports.isAdmin=(res,req)=>{
     {
         return res.status(401).json({
             success:false,
-         message:"User role is not matching "
+         message:"User role is not matching"
 
      })
     }

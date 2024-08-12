@@ -34,36 +34,37 @@ exports.signup = async (req, res) => {
 
     // saving to db
 
-    const user = await User.create({
+    let user = await User.create({
       fname,
       email,
       password: hashedPassword,
       role,
     });
 
-    const userObject = user.toObject();
+  
 
     //generating token for user
 
-    const token = jwt.sign(
-      {
-        id: user._id,
-        email,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: 3*24*60*60*1000,
-      }
-    );
+    // const token = jwt.sign(
+    //   {
+    //     id: user._id,
+    //     email,
+    //   },
+    //   process.env.JWT_SECRET,
+    //   {
+    //     expiresIn: 3*24*60*60*1000,
+    //   }
+    // );
 
-    console.log(token);
-
-    userObject.token = token;
+    // console.log(token);
+    console.log("user",user);
+    user= user.toObject();
+    // user.token = token;
     user.password = undefined;
 
     return res.status(201).json({
       success: true,
-      user: userObject,
+      user: user,
       message: "User created successfully",
     });
   } catch (error) {
@@ -90,7 +91,7 @@ exports.login = async (req, res) => {
     // console.log("dbemail", user);
 
     if (!user) {
-      return res.status(404).send("email not found");
+      return res.status(404).json({message:"email not found"});
     }
 
     const payload = {
@@ -115,9 +116,11 @@ exports.login = async (req, res) => {
       console.log("token",token)
 
       const options = {
-        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+        // expires:"2h",
         httpOnly: true,
       };
+     
       res.cookie("himcookie", token, options).status(200).json({
         success: true,
         token,
@@ -129,11 +132,13 @@ exports.login = async (req, res) => {
     } else {
       return res.status(400).json({
         success: false,
-        message: "password do not match",
+        message: "password is incorrect",
       });
     }
   } catch (error) {
+    console.log("error",error),
     res.status(500).json({
+    
       message: "error in logging",
     });
   }

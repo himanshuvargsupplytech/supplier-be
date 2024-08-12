@@ -31,7 +31,7 @@ router.get("/test",auth,(req,res)=>{
 router.get("/student",auth,isStudent,(req,res)=>{
     res.json({
          success:true,
-        message:"Welcome to the Protected route for tests"
+        message:"Welcome to the Protected route for tests for student"
 
     })
 })
@@ -40,7 +40,7 @@ router.get("/student",auth,isStudent,(req,res)=>{
 router.get("/admin",auth,isAdmin,(req,res)=>{
     res.json({
          success:true,
-        message:"Welcome to the Protected route for tests"
+        message:"Welcome to the Protected route for tests for admin"
 
     })
 })

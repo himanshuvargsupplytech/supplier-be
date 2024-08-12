@@ -2,12 +2,16 @@
 const express = require("express");
 const app = express();
 const helmet=require("helmet");
+const cors = require('cors');
+app.use(cors());
 
 
 
 require("dotenv").config();
 const PORT = process.env.PORT || 4001;
 
+const cookieParser=require("cookie-parser");
+app.use(cookieParser());
 // use middleware
 app.use(express.json());
 
@@ -19,12 +23,17 @@ app.use(helmet());
 const CustomerDataRoutes = require("./routes/submitData");
 app.use("/api/v1", CustomerDataRoutes);
 
-// const SellerDataRoutes = require("./routes/queryUserSearch");
+const SellerDataRoutes = require("./routes/queryUserSearch");
 
 // app.use("/api/v1", SellerDataRoutes);
 
-// const UserRegistrations=require("./routes/user")
-// app.use("/api/v1",UserRegistrations);
+const UserRegistrations=require("./routes/user")
+app.use("/api/v1",UserRegistrations);
+
+
+
+// const signUp=require("./routes/user")
+// app.use("/api/v1",signUp)
 
 
 // const userLogin=require("./routes/user")
