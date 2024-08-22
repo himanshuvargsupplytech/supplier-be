@@ -6,6 +6,6 @@ const {
 
 const router = express.Router();
 
-router.get("/getSuppliers", handlesearchUserInput);
+router.get("/searchSuppliers", handlesearchUserInput);
 
 module.exports = router;

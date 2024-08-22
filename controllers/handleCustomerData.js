@@ -251,10 +251,16 @@ const blobServiceClient = new BlobServiceClient(
 const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER_NAME);
 
 const renameFileName = (originalFileName) => {
+  console.log("**********")
+  const fileName = originalFileName.split(".")[0]
+  const fileExtension = originalFileName.split(".")[1]
+ 
   const now = new Date();
   const istOffset = 5 * 60 * 60 * 1000 + 30 * 60 * 1000; 
   const istTime = new Date(now.getTime() + istOffset);
-  return `${originalFileName}-${istTime.toISOString().replace(/:/g, '-').replace('T', '-').replace('Z', '')}`;
+  const generatedFileName = `${fileName}-${istTime.toISOString().replace(/:/g, '-').replace('T', '-').replace('Z', '')}`+"."+`${fileExtension}`;
+  console.log("GenerateFileName", generatedFileName)
+  return generatedFileName;
 };
 
 async function uploadFileToBlob(file) {
@@ -266,7 +272,12 @@ async function uploadFileToBlob(file) {
     const uploadBlobResponse = await blockBlobClient.upload(file.buffer, file.size);
     console.log(`Upload block blob ${modifiedFileName} successfully`, uploadBlobResponse.requestId);
   } catch (err) {
-    console.error('Error uploading file to Azure Blob Storage:', err.message);
+    console.error(err)
+    // console.error('Error uploading file to Azure Blob Storage:', err.message);
+    // res.status(403).json({
+    //   success:false,
+    //   message:"error in form submission"
+    // })
   }
 
   return { url: blockBlobClient.url, modifiedFileName };

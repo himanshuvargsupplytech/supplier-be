@@ -50,7 +50,7 @@ const dbConnect = require("./config/database");
 // call to dbconnect
 dbConnect();
 
-// app.get("/", (req, res) => {
-//     res.send(`<h1>This is HOMEPAGE </h1>`)
+app.get("/", (req, res) => {
+    res.send(`<h1>This is HOMEPAGE </h1>`)
 
-// })
+})
